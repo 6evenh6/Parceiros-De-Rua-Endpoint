@@ -58,6 +58,43 @@ namespace API_Parceiros_Da_Rua.Controllers
                 return BadRequest(ModelState);
             }
         }
+
+        [HttpGet("Users")]
+        public async Task<IEnumerable<UsersViewModel>> UsersAsync()
+        {
+            var users = new List<UsersViewModel>();
+            var queryString = "SELECT idusers, nome, email, gestao, datacadastro FROM heroku_ab73d035cef131f.users;";
+
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    using (MySqlCommand command = new MySqlCommand())
+                    {
+                        await connection.OpenAsync();
+                        command.Connection = connection;
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = queryString;
+                        
+                        using(var reader = await command.ExecuteReaderAsync())
+                        {
+                            while(await reader.ReadAsync())
+                            {
+                                int id = reader.GetInt32(0);
+                                string nome = reader.GetString(1);
+                                string email = reader.GetString(2);
+                                string gestao = reader.GetString(3).ToString();
+                            
+                                UsersViewModel user = new UsersViewModel { idUsers = id, nome = nome, email = email, gestao = gestao };
+                                users.Add(user);
+                                
+                            }
+                        }
+                    }
+                }
+
+                return users;
+            
+            
+        }
     }
 }
 
