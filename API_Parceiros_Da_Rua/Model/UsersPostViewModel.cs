@@ -3,11 +3,11 @@ using System.Text.Json.Serialization;
 
 namespace API_Parceiros_Da_Rua.Model
 {
-    public class UsersViewModel
+    public class UsersPostViewModel
     {
         // idusers, nome, email, gestao, datacadastro FROM users
-
-        public int idUsersGet { get; set; }
+        [JsonIgnore]
+        public int idUsers { get; set; }
         public string nome { get; set; } = string.Empty;
         public string email { get; set; } = string.Empty;
 
